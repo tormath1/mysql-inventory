@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import json
 
@@ -49,6 +51,8 @@ class Inventory(object):
             hostname = server.pop("hostname")
             self.inventory["group"]["hosts"].append(hostname)
             self.inventory["_meta"]["hostvars"][hostname] = server
+            self.inventory["_meta"]["hostvars"][hostname]["ansible_host"] = \
+                server.get("baseuri")
             
         return json.dumps(self.inventory, indent=2)
 
