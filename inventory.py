@@ -6,12 +6,12 @@ import json
 import mysql.connector
 from mysql.connector import errorcode
 
-host = os.getenv("MYQSL_HOST", "localhost")
-port = int(os.getenv("MYSQL_PORT", 3306))
-username = os.getenv("MYSQL_USERNAME", "username")
-password = os.getenv("MYSQL_PASSWORD", "password")
-database = os.getenv("MYSQL_DATABASE", "database")
-ssl_skip_verify = os.getenv("MYSQL_SSL_SKIP_VERIFY")
+host = os.getenv("ANSIBLE_INVENTORY_MYQSL_HOST", "localhost")
+port = int(os.getenv("ANSIBLE_INVENTORY_MYSQL_PORT", 3306))
+username = os.getenv("ANSIBLE_INVENTORY_MYSQL_USERNAME", "username")
+password = os.getenv("ANSIBLE_INVENTORY_MYSQL_PASSWORD", "password")
+database = os.getenv("ANSIBLE_INVENTORY_MYSQL_DATABASE", "database")
+ssl_skip_verify = os.getenv("ANSIBLE_INVENTORY_MYSQL_SSL_SKIP_VERIFY")
 
 class Inventory(object):
     def __init__(
