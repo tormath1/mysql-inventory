@@ -11,7 +11,7 @@ port = int(os.getenv("ANSIBLE_INVENTORY_MYSQL_PORT", 3306))
 username = os.getenv("ANSIBLE_INVENTORY_MYSQL_USERNAME", "username")
 password = os.getenv("ANSIBLE_INVENTORY_MYSQL_PASSWORD", "password")
 database = os.getenv("ANSIBLE_INVENTORY_MYSQL_DATABASE", "database")
-ssl_skip_verify = os.getenv("ANSIBLE_INVENTORY_MYSQL_SSL_SKIP_VERIFY")
+ssl_skip_verify = os.getenv("ANSIBLE_INVENTORY_MYSQL_SSL_SKIP_VERIFY", "")
 
 class Inventory(object):
     def __init__(
