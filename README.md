@@ -1,5 +1,7 @@
 ### MYSQL Ansible Dynamic Inventory
 
+![Python application](https://github.com/tormath1/mysql-inventory/workflows/Python%20application/badge.svg)
+
 #### Installation
 
 ```
