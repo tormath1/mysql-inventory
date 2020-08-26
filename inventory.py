@@ -4,10 +4,9 @@ import os
 import json
 
 import mysql.connector
-from mysql.connector import errorcode
 
 host = os.getenv("ANSIBLE_INVENTORY_MYQSL_HOST", "localhost")
-port = int(os.getenv("ANSIBLE_INVENTORY_MYSQL_PORT", 3306))
+port = os.getenv("ANSIBLE_INVENTORY_MYSQL_PORT", 3306)
 username = os.getenv("ANSIBLE_INVENTORY_MYSQL_USERNAME", "username")
 password = os.getenv("ANSIBLE_INVENTORY_MYSQL_PASSWORD", "password")
 database = os.getenv("ANSIBLE_INVENTORY_MYSQL_DATABASE", "database")
@@ -24,7 +23,7 @@ class Inventory(object):
         ssl_skip_verify,
     ):
         self.inventory = {"group":{}, "_meta": {}}
-        ssl_verify = False if len(ssl_skip_verify) > 0 else True
+        ssl_verify = not ssl_skip_verify
         try:
             self.conn = mysql.connector.connect(
                 host=host,
@@ -41,7 +40,7 @@ class Inventory(object):
         """
         generate inventory from MySQL connection
         """
-        query = "SELECT * from server_physique;"
+        query = "SELECT * FROM server_physique;"
         with self.conn.cursor(dictionary=True) as cur:
             cur.execute(query)
             res = cur.fetchall()
@@ -53,12 +52,7 @@ class Inventory(object):
             self.inventory["_meta"]["hostvars"][hostname] = server
             self.inventory["_meta"]["hostvars"][hostname]["ansible_host"] = \
                 server.get("baseuri")
-            
         return json.dumps(self.inventory, indent=2)
-
-    def _empty_inventory(self):
-            return {"_meta": {"hostvars": {}}}
-
 
 if __name__ == "__main__":
     try:
