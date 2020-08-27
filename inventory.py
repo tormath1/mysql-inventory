@@ -7,7 +7,7 @@ import mysql.connector
 
 # MySQL server connection information
 # TODO: could be loaded from a configuration file
-host = os.getenv("ANSIBLE_INVENTORY_MYQSL_HOST", "localhost")
+host = os.getenv("ANSIBLE_INVENTORY_MYSQL_HOST", "localhost")
 port = os.getenv("ANSIBLE_INVENTORY_MYSQL_PORT", 3306)
 username = os.getenv("ANSIBLE_INVENTORY_MYSQL_USERNAME", "username")
 password = os.getenv("ANSIBLE_INVENTORY_MYSQL_PASSWORD", "password")
