@@ -38,7 +38,7 @@ class Inventory(object):
                 ssl_verify_identity=ssl_verify,
             )
         except mysql.connector.Error as err:
-            print(f"unable to connect to MySQL server: {err}")
+            print("unable to connect to MySQL server: " + str(err))
 
     def generate(self):
         """
