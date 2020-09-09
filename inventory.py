@@ -25,7 +25,7 @@ class Inventory(object):
         ssl_skip_verify,
     ):
         # define base inventory
-        self.inventory = {"group":{}, "_meta": {}}
+        self.inventory = {"_meta": {}}
         # disable or not SSL CA verification
         ssl_verify = not ssl_skip_verify
         try:
@@ -50,15 +50,20 @@ class Inventory(object):
             # fetchall will return a dictionary,
             # each column is a key of the dictionary
             res = cur.fetchall()
-        # prepare the default group
-        self.inventory["group"]["hosts"] = []
         self.inventory["_meta"]["hostvars"] = {}
         for server in res:
             # we save and remove the `hostname` from the
             # json. It's removed to avoid having `hostname`
             # in the hostvars
             hostname = server.pop("hostname")
-            self.inventory["group"]["hosts"].append(hostname)
+            # we always append the host to the `all` group
+            # groups will be created based on the database
+            # values
+            groups = [
+                server.get("buildStatus"),
+                server.get("appName"),
+            ]
+            self.add_host_to_group(hostname, groups)
             # we add the server information to hostvars
             self.inventory["_meta"]["hostvars"][hostname] = server
             # custom override to set the `ansible_host` to the baseuri in order
@@ -66,6 +71,17 @@ class Inventory(object):
             self.inventory["_meta"]["hostvars"][hostname]["ansible_host"] = \
                 server.get("baseuri")
         return json.dumps(self.inventory, indent=2)
+
+    def add_host_to_group(self, host, groups):
+            """
+            add a host to a group
+            """
+            for group in groups:
+                if not self.inventory.get(group):
+                    self.inventory[group] = {}
+                    self.inventory[group]["hosts"] = [host]
+                else:
+                    self.inventory[group]["hosts"].append(host)
 
 if __name__ == "__main__":
     try:
